@@ -331,6 +331,7 @@ export const examples: Example[] = [
             width: 49,
             height: 21,
             alt: "Stripe",
+            style: null,
           },
           children: [],
         },

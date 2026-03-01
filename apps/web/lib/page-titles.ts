@@ -23,7 +23,10 @@ export const PAGE_TITLES: Record<string, string> = {
   "docs/streaming": "Streaming",
   "docs/validation": "Validation",
   "docs/data-binding": "Data Binding",
+  "docs/computed-values": "Computed Values",
   "docs/visibility": "Visibility",
+  "docs/watchers": "Watchers",
+  "docs/renderers": "Renderers",
   "docs/generation-modes": "Generation Modes",
   "docs/code-export": "Code Export",
   "docs/custom-schema": "Custom Schema & Renderer",
@@ -43,6 +46,7 @@ export const PAGE_TITLES: Record<string, string> = {
   "docs/api/react-email": "@json-render/react-email API",
   "docs/api/react-native": "@json-render/react-native API",
   "docs/api/codegen": "@json-render/codegen API",
+  "docs/api/image": "@json-render/image API",
   "docs/api/remotion": "@json-render/remotion API",
   "docs/api/shadcn": "@json-render/shadcn API",
 };

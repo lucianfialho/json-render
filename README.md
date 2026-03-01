@@ -121,10 +121,11 @@ function Dashboard({ spec }) {
 | `@json-render/remotion` | Remotion video renderer, timeline schema |
 | `@json-render/react-pdf` | React PDF renderer for generating PDF documents from specs |
 | `@json-render/react-email` | React Email renderer for HTML/plain-text emails from specs |
+| `@json-render/image` | Image renderer for SVG/PNG output (OG images, social cards) via Satori |
 | `@json-render/redux` | Redux / Redux Toolkit adapter for `StateStore` |
 | `@json-render/zustand` | Zustand adapter for `StateStore` |
 | `@json-render/jotai` | Jotai adapter for `StateStore` |
-| `@json-render/xstate-store` | XState Store (atom) adapter for `StateStore` |
+| `@json-render/xstate` | XState Store (atom) adapter for `StateStore` |
 
 ## Renderers
 
@@ -324,6 +325,35 @@ const spec = {
 const html = await renderToHtml(spec);
 ```
 
+### Image (SVG/PNG)
+
+```typescript
+import { renderToPng } from "@json-render/image/render";
+
+const spec = {
+  root: "frame",
+  elements: {
+    frame: {
+      type: "Frame",
+      props: { width: 1200, height: 630, backgroundColor: "#1a1a2e" },
+      children: ["heading"],
+    },
+    heading: {
+      type: "Heading",
+      props: { text: "Hello World", level: "h1", color: "#ffffff" },
+      children: [],
+    },
+  },
+};
+
+// Render to PNG (requires @resvg/resvg-js)
+const png = await renderToPng(spec, { fonts });
+
+// Or render to SVG string
+import { renderToSvg } from "@json-render/image/render";
+const svg = await renderToSvg(spec, { fonts });
+```
+
 ## Features
 
 ### Streaming (SpecStream)
@@ -379,10 +409,12 @@ Any prop value can be data-driven using expressions:
 }
 ```
 
-Two expression forms:
+Expression forms:
 
 - **`{ "$state": "/state/key" }`** - reads a value from the state model
-- **`{ "$cond": <condition>, "$then": <value>, "$else": <value> }`** - evaluates a condition (same syntax as visibility conditions) and picks a branch
+- **`{ "$cond": <condition>, "$then": <value>, "$else": <value> }`** - evaluates a condition and picks a branch
+- **`{ "$template": "Hello, ${/user/name}!" }`** - interpolates state values into strings
+- **`{ "$computed": "fn", "args": { ... } }`** - calls a registered function with resolved args
 
 ### Actions
 
@@ -397,6 +429,22 @@ Components can trigger actions, including the built-in `setState` action:
 ```
 
 The `setState` action updates the state model directly, which re-evaluates visibility conditions and dynamic prop expressions.
+
+### State Watchers
+
+React to state changes by triggering actions:
+
+```json
+{
+  "type": "Select",
+  "props": { "value": { "$bindState": "/form/country" }, "options": ["US", "Canada", "UK"] },
+  "watch": {
+    "/form/country": { "action": "loadCities", "params": { "country": { "$state": "/form/country" } } }
+  }
+}
+```
+
+`watch` is a top-level field on elements (sibling of `type`/`props`/`children`). Watchers fire when the watched value changes, not on initial render.
 
 ---
 
@@ -414,6 +462,8 @@ pnpm dev
 - http://react-email-demo.json-render.localhost:1355 - React Email Example
 - http://remotion-demo.json-render.localhost:1355 - Remotion Video Example
 - Chat Example: run `pnpm dev` in `examples/chat`
+- Vue Example: run `pnpm dev` in `examples/vue`
+- Vite Renderers (React + Vue): run `pnpm dev` in `examples/vite-renderers`
 - React Native example: run `npx expo start` in `examples/react-native`
 
 ## How It Works

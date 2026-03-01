@@ -1,6 +1,6 @@
 {
   "name": "example-chat",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "type": "module",
   "private": true,
   "scripts": {
@@ -33,7 +33,7 @@
     "streamdown": "^2.2.0",
     "tailwind-merge": "^3.4.0",
     "three": "^0.182.0",
-    "zod": "4.3.5"
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@internal/eslint-config": "workspace:*",
